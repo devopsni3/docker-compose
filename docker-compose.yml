@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+
+  mysql_db:
+    container_name: mysql_container
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: pavan9090
+      MYSQL_DATABASE: wordpress_database
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: wordpress_user_password
+    volumes:
+      - $PWD/mysql_vol:/var/lib/mysql
+
+
+  wordpress:
+    depends_on:
+      - mysql_db
+    image: wordpress:6.2
+    ports:
+      - "9002:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql_db:3306
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wordpress_user_password
+      WORDPRESS_DB_NAME: wordpress_database
+    volumes:
+      - $PWD/html:/var/www/html
